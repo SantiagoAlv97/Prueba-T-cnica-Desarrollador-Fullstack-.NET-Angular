@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using eventos_vivos.BLL.Interfaces;
 using eventos_vivos.BDO.DTOs.Reservas;
 using Microsoft.AspNetCore.Authorization;
@@ -41,6 +41,17 @@ namespace eventos_vivos_api.Controllers
                 return StatusCode(403, new { message = "No tienes permiso para consultar esta reserva." });
 
             return Ok(reserva);
+        }
+
+        [Authorize]
+        [HttpGet("mis-reservas")]
+        public async Task<IActionResult> GetMisReservas()
+        {
+            if (!TryObtenerUsuarioId(out var usuarioId))
+                return Unauthorized(new { message = "Usuario no autenticado correctamente." });
+
+            var list = await _service.ListarPorUsuarioAsync(usuarioId);
+            return Ok(list);
         }
 
         [Authorize]

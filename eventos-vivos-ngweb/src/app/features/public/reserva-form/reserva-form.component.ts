@@ -56,10 +56,9 @@ export class ReservaFormComponent {
 
     const usuario = this.authService.getUsuario();
     const evento = this.evento();
-    const usuarioId = typeof usuario?.usuarioId === 'number' ? usuario.usuarioId : Number(usuario?.usuarioId);
     const eventoId = Number(evento?.eventoId ?? evento?.id);
 
-    if (!usuario || !Number.isFinite(usuarioId) || !evento || !Number.isFinite(eventoId)) {
+    if (!usuario || !evento || !Number.isFinite(eventoId)) {
       this.toastService.error('No fue posible preparar la reserva.');
       return;
     }
@@ -69,7 +68,6 @@ export class ReservaFormComponent {
     this.reservasService
       .crear({
         eventoId,
-        usuarioId,
         cantidad: this.form.getRawValue().cantidad,
       })
       .subscribe({

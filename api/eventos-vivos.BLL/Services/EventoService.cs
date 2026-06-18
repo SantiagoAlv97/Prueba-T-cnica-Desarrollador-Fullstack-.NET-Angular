@@ -1,4 +1,4 @@
-using eventosvivos.DAL.Persistence;
+﻿using eventosvivos.DAL.Persistence;
 using eventos_vivos.BDO.DTOs.Eventos;
 using eventos_vivos.BDO.Enums;
 using eventosvivos.DAL.Entities;
@@ -242,13 +242,20 @@ namespace eventos_vivos.BLL.Services
         {
             if (string.IsNullOrWhiteSpace(titulo) || titulo.Length < 5 || titulo.Length > 100)
                 throw new ArgumentException("Título inválido");
+
             if (string.IsNullOrWhiteSpace(descripcion) || descripcion.Length < 10 || descripcion.Length > 500)
                 throw new ArgumentException("Descripción inválida");
+
             if (venueId <= 0) throw new ArgumentException("Venue es obligatorio");
+
             if (tipoEventoId <= 0) throw new ArgumentException("Tipo de evento es obligatorio");
+
             if (capacidadMaxima <= 0) throw new ArgumentException("Capacidad máxima debe ser mayor a 0");
+
             if (fechaInicio <= DateTime.UtcNow) throw new ArgumentException("Fecha inicio debe ser futura");
+
             if (fechaFin <= fechaInicio) throw new ArgumentException("Fecha fin debe ser mayor a fecha inicio");
+
             if (precioEntrada <= 0) throw new ArgumentException("Precio entrada debe ser mayor a 0");
 
             // RN03: preferí validar el horario nocturno aquí porque el horario nace desde la creación o la edición del evento.
@@ -313,3 +320,4 @@ namespace eventos_vivos.BLL.Services
         }
     }
 }
+

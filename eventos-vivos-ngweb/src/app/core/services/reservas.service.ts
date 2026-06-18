@@ -26,6 +26,12 @@ export class ReservasService {
     );
   }
 
+  listarMisReservas(): Observable<Reserva[]> {
+    return this.http.get<ReservaApi[]>(`${this.endpoint}/mis-reservas`).pipe(
+      map((reservas) => reservas.map((reserva) => this.normalizarReserva(reserva))),
+    );
+  }
+
   listarPorUsuario(usuarioId: number | string): Observable<Reserva[]> {
     return this.http.get<ReservaApi[]>(`${this.endpoint}/usuario/${usuarioId}`).pipe(
       map((reservas) => reservas.map((reserva) => this.normalizarReserva(reserva))),

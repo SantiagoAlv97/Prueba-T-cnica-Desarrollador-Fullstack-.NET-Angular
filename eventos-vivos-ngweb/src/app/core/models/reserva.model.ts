@@ -26,6 +26,5 @@ export interface EventoReservaResumen {
 
 export interface CrearReservaRequest {
   eventoId: number;
-  usuarioId: number;
   cantidad: number;
 }

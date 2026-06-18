@@ -102,6 +102,39 @@ describe('AuthService', () => {
     expect(router.navigateByUrl).toHaveBeenCalledWith('/login');
   });
 
+  it('should load the authenticated profile and refresh the cached user', () => {
+    localStorage.setItem('access_token', createToken());
+    service = TestBed.inject(AuthService);
+    httpMock = TestBed.inject(HttpTestingController);
+
+    service.obtenerPerfil().subscribe((usuario) => {
+      expect(usuario.email).toBe('ada@example.com');
+    });
+
+    const request = httpMock.expectOne('/api/auth/me');
+    expect(request.request.method).toBe('GET');
+
+    request.flush({
+      usuarioId: 7,
+      nombre: 'Ada',
+      email: 'ada@example.com',
+      rol: 'administrador',
+      fotoUrl: 'https://cdn.example.com/ada.png',
+      activo: true,
+      fechaCreacion: '2026-06-18T00:00:00Z',
+      fechaUltimoAcceso: '2026-06-18T12:00:00Z',
+    });
+
+    expect(service.getUsuario()).toEqual(
+      expect.objectContaining({
+        usuarioId: 7,
+        nombre: 'Ada',
+        email: 'ada@example.com',
+        rol: 'administrador',
+      }),
+    );
+  });
+
   it('should return an empty token and clear the session when access token is expired', () => {
     localStorage.setItem('access_token', createToken(-60));
     localStorage.setItem(

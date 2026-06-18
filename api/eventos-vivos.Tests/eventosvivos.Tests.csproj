@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\eventos-vivos.api\eventos-vivos.api.csproj" />
     <ProjectReference Include="..\eventos-vivos.BDO\eventosvivos.BDO.csproj" />
     <ProjectReference Include="..\eventos-vivos.BLL\eventosvivos.BLL.csproj" />
     <ProjectReference Include="..\eventos-vivos.DAL\eventosvivos.DAL.csproj" />

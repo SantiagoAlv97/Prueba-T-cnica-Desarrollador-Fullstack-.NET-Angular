@@ -6,5 +6,6 @@ namespace eventos_vivos.BLL.Interfaces
     public interface IAuthService
     {
         Task<LoginResponse> LoginGoogleAsync(GoogleLoginRequest request);
+        Task<UsuarioPerfilResponse?> ObtenerUsuarioActualAsync(long usuarioId);
     }
 }

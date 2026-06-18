@@ -5,18 +5,28 @@ import { Observable, tap } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { AuthResponse } from '../models/auth-response.model';
+import { Usuario } from '../models/usuario.model';
 import { UsuarioAuth } from '../models/usuario-auth.model';
 
-type UsuarioAuthInput = Partial<UsuarioAuth> &
-  Partial<AuthResponse> & {
-    usuarioId?: number | null;
-  };
+type UsuarioAuthInput = {
+  id?: string | number;
+  usuarioId?: number | string | null;
+  nombre?: string | null;
+  name?: string | null;
+  email?: string | null;
+  rol?: string | null;
+  fotoUrl?: string | null;
+  fotoURL?: string | null;
+  FotoURL?: string | null;
+  picture?: string | null;
+};
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
   private readonly endpoint = `${environment.apiUrl}/auth/google`;
+  private readonly profileEndpoint = `${environment.apiUrl}/auth/me`;
   private readonly usuarioSignal = signal<UsuarioAuth | null>(this.leerUsuario());
   private readonly accessTokenSignal = signal(this.leerAccessToken());
   private sessionExpirationTimer: ReturnType<typeof setTimeout> | null = null;
@@ -35,6 +45,14 @@ export class AuthService {
         localStorage.setItem('access_token', response.token);
         this.setUsuario(this.normalizarUsuario(response));
         this.programarExpiracionSesion(response.token);
+      }),
+    );
+  }
+
+  obtenerPerfil(): Observable<Usuario> {
+    return this.http.get<Usuario>(this.profileEndpoint).pipe(
+      tap((usuario) => {
+        this.setUsuario(this.normalizarUsuario(usuario));
       }),
     );
   }
@@ -135,10 +153,11 @@ export class AuthService {
       usuario.FotoURL?.trim() ||
       usuario.picture?.trim() ||
       undefined;
+    const usuarioIdNormalizado = this.normalizarUsuarioId(usuario.usuarioId);
 
     return {
-      id: usuario.id ?? usuario.usuarioId ?? undefined,
-      usuarioId: usuario.usuarioId ?? undefined,
+      id: usuario.id ?? usuarioIdNormalizado ?? undefined,
+      usuarioId: usuarioIdNormalizado,
       nombre: usuario.nombre ?? usuario.name ?? undefined,
       name: usuario.name ?? usuario.nombre ?? undefined,
       email: usuario.email ?? undefined,
@@ -152,6 +171,23 @@ export class AuthService {
 
   private esUsuarioValido(valor: unknown): valor is UsuarioAuthInput {
     return typeof valor === 'object' && valor !== null;
+  }
+
+  private normalizarUsuarioId(usuarioId: number | string | null | undefined): number | null | undefined {
+    if (typeof usuarioId === 'number' && Number.isFinite(usuarioId)) {
+      return usuarioId;
+    }
+
+    if (typeof usuarioId === 'string' && usuarioId.trim()) {
+      const numero = Number(usuarioId);
+      return Number.isFinite(numero) ? numero : undefined;
+    }
+
+    if (usuarioId === null) {
+      return null;
+    }
+
+    return undefined;
   }
 
   private finalizarSesion(redirectToLogin: boolean): void {

@@ -71,10 +71,18 @@ describe('ReservasService', () => {
     request.flush([]);
   });
 
+  it('should list reservations for the authenticated user', () => {
+    service.listarMisReservas().subscribe();
+
+    const request = httpMock.expectOne('/api/Reservas/mis-reservas');
+    expect(request.request.method).toBe('GET');
+
+    request.flush([]);
+  });
+
   it('should create a reservation', () => {
     const payload = {
       eventoId: 5,
-      usuarioId: 7,
       cantidad: 3,
     };
 

@@ -3,7 +3,6 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { Reserva } from '../../../core/models/reserva.model';
-import { AuthService } from '../../../core/services/auth.service';
 import { ReservasService } from '../../../core/services/reservas.service';
 import { ToastService } from '../../../core/services/toast.service';
 
@@ -14,7 +13,6 @@ import { ToastService } from '../../../core/services/toast.service';
   styleUrl: './mis-reservas.component.scss',
 })
 export class MisReservasComponent {
-  private readonly authService = inject(AuthService);
   private readonly reservasService = inject(ReservasService);
   private readonly toastService = inject(ToastService);
 
@@ -25,16 +23,7 @@ export class MisReservasComponent {
   protected readonly totalReservas = computed(() => this.reservas().length);
 
   constructor() {
-    const usuario = this.authService.getUsuario();
-    const usuarioId = Number(usuario?.usuarioId);
-
-    if (!Number.isFinite(usuarioId)) {
-      this.error.set('No fue posible identificar el usuario autenticado.');
-      this.cargando.set(false);
-      return;
-    }
-
-    this.reservasService.listarPorUsuario(usuarioId).subscribe({
+    this.reservasService.listarMisReservas().subscribe({
       next: (reservas) => {
         this.reservas.set(reservas);
         this.cargando.set(false);

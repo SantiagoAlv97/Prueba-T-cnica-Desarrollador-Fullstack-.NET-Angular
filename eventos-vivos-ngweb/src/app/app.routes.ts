@@ -55,14 +55,9 @@ export const routes: Routes = [
       {
         path: 'mi-cuenta',
         canActivate: [authGuard],
-        data: {
-          title: 'Mis datos',
-          description:
-            'Aqui se mostraran los datos de perfil y preferencias de la cuenta autenticada.',
-        },
         loadComponent: () =>
-          import('./features/account/account-section-placeholder/account-section-placeholder.component').then(
-            (c) => c.AccountSectionPlaceholderComponent,
+          import('./features/account/account-section/account-section.component').then(
+            (c) => c.AccountSectionComponent,
           ),
       },
     ],

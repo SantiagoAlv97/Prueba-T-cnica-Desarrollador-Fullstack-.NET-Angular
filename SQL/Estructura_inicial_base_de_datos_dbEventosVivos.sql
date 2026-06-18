@@ -1,5 +1,5 @@
 /*
-Prueba tÈcnica
+Prueba t√©cnica SQL
 Script necesario para inicializar base de datos dbEventosVivos
 Estrcutura y datos iniciales
 */
@@ -23,9 +23,9 @@ CREATE TABLE Venues (
 );
 
 INSERT INTO Venues VALUES
-('Auditorio Central', 200, 'Bogot·'),
-('Sala Norte', 50, 'Bogot·'),
-('Arena Sur', 500, 'MedellÌn');
+('Auditorio Central', 200, 'Bogot√°'),
+('Sala Norte', 50, 'Bogot√°'),
+('Arena Sur', 500, 'Medell√≠n');
 
 
 /* TIPOS DE EVENTO */
@@ -80,7 +80,7 @@ INSERT INTO Roles VALUES
 (2, 'administrador');
 
 
-/* GESTTI”N USUARIOS */
+/* GESTI√ìN USUARIOS */
 
 CREATE TABLE Usuarios (
     UsuarioID BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -104,7 +104,7 @@ CREATE TABLE Usuarios (
 );
 
 
-/* GESTI”N EVENTOS */
+/* GESTI√ìN EVENTOS */
 
 CREATE TABLE Eventos (
     EventoID BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -173,13 +173,13 @@ CREATE TABLE Reservas (
 );
 
 
-/* ÕNDICE ⁄NICO PARA C”DIGO DE RESERVA CONFIRMADA */
+/* √çNDICE √öNICO PARA C√ìDIGO DE RESERVA CONFIRMADA */
 CREATE UNIQUE INDEX IX_Reservas_CodigoReserva
 ON Reservas (CodigoReserva)
 WHERE CodigoReserva IS NOT NULL;
 
 
-/* ÕNDICES PARA BUSQUEDAS */
+/* √çNDICES PARA BUSQUEDAS */
 
 CREATE INDEX IX_Eventos_VenueID 
 ON Eventos (VenueID);

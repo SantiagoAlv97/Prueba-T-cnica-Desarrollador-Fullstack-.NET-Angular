@@ -4,23 +4,30 @@ import { of } from 'rxjs';
 import { vi } from 'vitest';
 
 import { MisReservasComponent } from './mis-reservas.component';
-import { AuthService } from '../../../core/services/auth.service';
 import { ReservasService } from '../../../core/services/reservas.service';
 import { ToastService } from '../../../core/services/toast.service';
 
 describe('MisReservasComponent', () => {
-  let authService: { getUsuario: ReturnType<typeof vi.fn> };
   let reservasService: {
+    listarMisReservas: ReturnType<typeof vi.fn>;
     listarPorUsuario: ReturnType<typeof vi.fn>;
     cancelar: ReturnType<typeof vi.fn>;
   };
   let toastService: { success: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
-    authService = {
-      getUsuario: vi.fn().mockReturnValue({ usuarioId: 8 }),
-    };
     reservasService = {
+      listarMisReservas: vi.fn().mockReturnValue(
+        of([
+          {
+            id: 1,
+            reservaId: 1,
+            cantidad: 2,
+            estadoReserva: 'pendiente_pago',
+            eventoTitulo: 'Conferencia Angular',
+          },
+        ]),
+      ),
       listarPorUsuario: vi.fn().mockReturnValue(
         of([
           {
@@ -42,7 +49,6 @@ describe('MisReservasComponent', () => {
       imports: [MisReservasComponent],
       providers: [
         provideRouter([]),
-        { provide: AuthService, useValue: authService },
         { provide: ReservasService, useValue: reservasService },
         { provide: ToastService, useValue: toastService },
       ],
@@ -53,7 +59,7 @@ describe('MisReservasComponent', () => {
     const fixture = TestBed.createComponent(MisReservasComponent);
 
     expect(fixture.componentInstance).toBeTruthy();
-    expect(reservasService.listarPorUsuario).toHaveBeenCalledWith(8);
+    expect(reservasService.listarMisReservas).toHaveBeenCalled();
     expect(
       (fixture.componentInstance as never as { totalReservas: () => number }).totalReservas(),
     ).toBe(1);
