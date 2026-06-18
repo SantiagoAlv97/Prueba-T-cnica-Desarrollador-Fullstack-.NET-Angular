@@ -20,6 +20,10 @@ import {
 })
 export class EventoFormComponent {
   private readonly fb = inject(FormBuilder);
+  protected readonly tituloMinLength = 5;
+  protected readonly tituloMaxLength = 100;
+  protected readonly descripcionMinLength = 10;
+  protected readonly descripcionMaxLength = 500;
 
   readonly evento = input<Evento | null>(null);
   readonly tiposEvento = input<TipoEvento[]>([]);
@@ -33,14 +37,28 @@ export class EventoFormComponent {
   readonly cancelled = output<void>();
 
   protected readonly form = this.fb.nonNullable.group({
-    titulo: ['', [Validators.required, Validators.maxLength(200)]],
-    descripcion: ['', [Validators.required]],
+    titulo: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(this.tituloMinLength),
+        Validators.maxLength(this.tituloMaxLength),
+      ],
+    ],
+    descripcion: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(this.descripcionMinLength),
+        Validators.maxLength(this.descripcionMaxLength),
+      ],
+    ],
     venueId: [0, [Validators.required, Validators.min(1)]],
     tipoEventoId: [0, [Validators.required, Validators.min(1)]],
     capacidadMaxima: [1, [Validators.required, Validators.min(1)]],
     fechaInicio: ['', [Validators.required]],
     fechaFin: ['', [Validators.required]],
-    precioEntrada: [0, [Validators.required, Validators.min(0)]],
+    precioEntrada: [0, [Validators.required, Validators.min(1)]],
     estadoEventoId: [1, [Validators.required, Validators.min(1)]],
   });
 
@@ -115,6 +133,15 @@ export class EventoFormComponent {
 
   protected cancel(): void {
     this.cancelled.emit();
+  }
+
+  protected shouldShowError(controlName: keyof typeof this.form.controls): boolean {
+    const control = this.form.controls[controlName];
+    return control.invalid && (control.touched || control.dirty);
+  }
+
+  protected hasError(controlName: keyof typeof this.form.controls, errorCode: string): boolean {
+    return Boolean(this.form.controls[controlName].errors?.[errorCode]);
   }
 
   private normalizarNumero(value: number | string | null | undefined): number | null {

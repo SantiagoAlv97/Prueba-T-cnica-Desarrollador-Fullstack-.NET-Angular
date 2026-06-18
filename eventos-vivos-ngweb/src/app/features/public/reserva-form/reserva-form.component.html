@@ -18,7 +18,7 @@
             {{ item.titulo }}
           </h1>
           <p class="mt-4 text-base leading-7 text-black/78">
-            {{ item.descripcion || 'Sin descripción disponible.' }}
+            {{ item.descripcion || 'Sin descripcion disponible.' }}
           </p>
           <div class="mt-6 grid gap-4 md:grid-cols-2">
             <div class="border border-[#D1D1D1] bg-[#F2F2F2] p-4">
@@ -39,11 +39,16 @@
             id="cantidad"
             type="number"
             min="1"
+            required
             formControlName="cantidad"
             class="mt-2 min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-2 focus:border-black/30"
           />
           @if (form.controls.cantidad.invalid && form.controls.cantidad.touched) {
-            <p class="mt-2 text-sm text-[#93000A]">Ingresa una cantidad válida.</p>
+            @if (form.controls.cantidad.errors?.['required']) {
+              <p class="mt-2 text-sm text-[#93000A]">La cantidad es obligatoria.</p>
+            } @else if (form.controls.cantidad.errors?.['min']) {
+              <p class="mt-2 text-sm text-[#93000A]">La cantidad debe ser mayor a 0.</p>
+            }
           }
 
           <div class="mt-8 flex flex-col gap-3">

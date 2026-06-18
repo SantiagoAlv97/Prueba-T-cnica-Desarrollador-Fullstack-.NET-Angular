@@ -244,7 +244,7 @@ namespace eventos_vivos.BLL.Services
                 throw new ArgumentException("Título inválido");
 
             if (string.IsNullOrWhiteSpace(descripcion) || descripcion.Length < 10 || descripcion.Length > 500)
-                throw new ArgumentException("Descripción inválida");
+                throw new ArgumentException("Descripción inválida. Debe tener entre 10 y 500 caracteres.\r\n");
 
             if (venueId <= 0) throw new ArgumentException("Venue es obligatorio");
 

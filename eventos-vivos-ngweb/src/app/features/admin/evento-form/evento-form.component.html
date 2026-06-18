@@ -6,46 +6,140 @@
 
   <form [formGroup]="form" (ngSubmit)="submit()" class="mt-5 grid max-h-[78vh] gap-4 overflow-y-auto pr-1">
     <div>
-      <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Título</label>
-      <input formControlName="titulo" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30" />
+      <div class="mb-2 flex items-center justify-between gap-3">
+        <label class="block text-xs font-bold uppercase tracking-[0.14em] text-black" for="titulo">Titulo</label>
+        <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-black/60">Obligatorio</span>
+      </div>
+      <input
+        id="titulo"
+        formControlName="titulo"
+        required
+        [attr.minlength]="tituloMinLength"
+        [attr.maxlength]="tituloMaxLength"
+        class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"
+      />
+      <div class="mt-2 flex items-center justify-between gap-3 text-xs">
+        <div class="text-[#93000A]">
+          @if (shouldShowError('titulo')) {
+            @if (hasError('titulo', 'required')) {
+              <p>El titulo es obligatorio.</p>
+            } @else if (hasError('titulo', 'minlength')) {
+              <p>El titulo debe tener al menos {{ tituloMinLength }} caracteres.</p>
+            } @else if (hasError('titulo', 'maxlength')) {
+              <p>El titulo no puede superar {{ tituloMaxLength }} caracteres.</p>
+            }
+          }
+        </div>
+        <span class="ml-auto text-black/60">{{ form.controls.titulo.value.length }}/{{ tituloMaxLength }}</span>
+      </div>
     </div>
 
     <div>
-      <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Descripción</label>
-      <textarea formControlName="descripcion" rows="4" class="w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"></textarea>
+      <div class="mb-2 flex items-center justify-between gap-3">
+        <label class="block text-xs font-bold uppercase tracking-[0.14em] text-black" for="descripcion">Descripcion</label>
+        <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-black/60">Obligatorio</span>
+      </div>
+      <textarea
+        id="descripcion"
+        formControlName="descripcion"
+        rows="4"
+        required
+        [attr.minlength]="descripcionMinLength"
+        [attr.maxlength]="descripcionMaxLength"
+        class="w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"
+      ></textarea>
+      <div class="mt-2 flex items-center justify-between gap-3 text-xs">
+        <div class="text-[#93000A]">
+          @if (shouldShowError('descripcion')) {
+            @if (hasError('descripcion', 'required')) {
+              <p>La descripcion es obligatoria.</p>
+            } @else if (hasError('descripcion', 'minlength')) {
+              <p>La descripcion debe tener al menos {{ descripcionMinLength }} caracteres.</p>
+            } @else if (hasError('descripcion', 'maxlength')) {
+              <p>La descripcion no puede superar {{ descripcionMaxLength }} caracteres.</p>
+            }
+          }
+        </div>
+        <span class="ml-auto text-black/60">{{ form.controls.descripcion.value.length }}/{{ descripcionMaxLength }}</span>
+      </div>
     </div>
 
     <div class="grid gap-4 md:grid-cols-2">
       <div>
-        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Venue</label>
-        <select formControlName="venueId" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30">
+        <div class="mb-2 flex items-center justify-between gap-3">
+          <label class="block text-xs font-bold uppercase tracking-[0.14em] text-black" for="venueId">Venue</label>
+          <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-black/60">Obligatorio</span>
+        </div>
+        <select
+          id="venueId"
+          formControlName="venueId"
+          required
+          class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"
+        >
           <option [value]="0">Selecciona un venue</option>
           @for (venue of venues(); track venue.venueId) {
             <option [value]="venue.venueId">{{ venue.nombre }}</option>
           }
         </select>
+        @if (shouldShowError('venueId') && hasError('venueId', 'min')) {
+          <p class="mt-2 text-sm text-[#93000A]">Debes seleccionar un venue.</p>
+        }
       </div>
 
       <div>
-        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Tipo</label>
-        <select formControlName="tipoEventoId" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30">
+        <div class="mb-2 flex items-center justify-between gap-3">
+          <label class="block text-xs font-bold uppercase tracking-[0.14em] text-black" for="tipoEventoId">Tipo</label>
+          <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-black/60">Obligatorio</span>
+        </div>
+        <select
+          id="tipoEventoId"
+          formControlName="tipoEventoId"
+          required
+          class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"
+        >
           <option [value]="0">Selecciona un tipo</option>
           @for (tipo of tiposEvento(); track tipo.tipoEventoId) {
             <option [value]="tipo.tipoEventoId">{{ tipo.descripcion }}</option>
           }
         </select>
+        @if (shouldShowError('tipoEventoId') && hasError('tipoEventoId', 'min')) {
+          <p class="mt-2 text-sm text-[#93000A]">Debes seleccionar un tipo de evento.</p>
+        }
       </div>
     </div>
 
     <div class="grid gap-4 md:grid-cols-2">
       <div>
-        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Fecha inicio</label>
-        <input type="datetime-local" formControlName="fechaInicio" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30" />
+        <div class="mb-2 flex items-center justify-between gap-3">
+          <label class="block text-xs font-bold uppercase tracking-[0.14em] text-black" for="fechaInicio">Fecha inicio</label>
+          <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-black/60">Obligatorio</span>
+        </div>
+        <input
+          id="fechaInicio"
+          type="datetime-local"
+          formControlName="fechaInicio"
+          required
+          class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"
+        />
+        @if (shouldShowError('fechaInicio') && hasError('fechaInicio', 'required')) {
+          <p class="mt-2 text-sm text-[#93000A]">La fecha de inicio es obligatoria.</p>
+        }
       </div>
       <div>
-        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Fecha fin</label>
-        <input type="datetime-local" formControlName="fechaFin" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30" />
-        @if (form.controls.fechaFin.errors?.['beforeStart']) {
+        <div class="mb-2 flex items-center justify-between gap-3">
+          <label class="block text-xs font-bold uppercase tracking-[0.14em] text-black" for="fechaFin">Fecha fin</label>
+          <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-black/60">Obligatorio</span>
+        </div>
+        <input
+          id="fechaFin"
+          type="datetime-local"
+          formControlName="fechaFin"
+          required
+          class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"
+        />
+        @if (shouldShowError('fechaFin') && hasError('fechaFin', 'required')) {
+          <p class="mt-2 text-sm text-[#93000A]">La fecha de fin es obligatoria.</p>
+        } @else if (form.controls.fechaFin.errors?.['beforeStart']) {
           <p class="mt-2 text-sm text-[#93000A]">La fecha fin debe ser posterior a la fecha inicio.</p>
         }
       </div>
@@ -53,21 +147,58 @@
 
     <div class="grid gap-4 md:grid-cols-3">
       <div>
-        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Capacidad</label>
-        <input type="number" min="1" formControlName="capacidadMaxima" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30" />
+        <div class="mb-2 flex items-center justify-between gap-3">
+          <label class="block text-xs font-bold uppercase tracking-[0.14em] text-black" for="capacidadMaxima">Capacidad</label>
+          <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-black/60">Obligatorio</span>
+        </div>
+        <input
+          id="capacidadMaxima"
+          type="number"
+          min="1"
+          formControlName="capacidadMaxima"
+          required
+          class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"
+        />
+        @if (shouldShowError('capacidadMaxima')) {
+          <p class="mt-2 text-sm text-[#93000A]">La capacidad debe ser mayor a 0.</p>
+        }
       </div>
       <div>
-        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Precio</label>
-        <input type="number" min="0" formControlName="precioEntrada" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30" />
+        <div class="mb-2 flex items-center justify-between gap-3">
+          <label class="block text-xs font-bold uppercase tracking-[0.14em] text-black" for="precioEntrada">Precio</label>
+          <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-black/60">Obligatorio</span>
+        </div>
+        <input
+          id="precioEntrada"
+          type="number"
+          min="1"
+          formControlName="precioEntrada"
+          required
+          class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"
+        />
+        @if (shouldShowError('precioEntrada')) {
+          <p class="mt-2 text-sm text-[#93000A]">El precio debe ser mayor a 0.</p>
+        }
       </div>
       <div>
-        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Estado</label>
-        <select formControlName="estadoEventoId" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30">
+        <div class="mb-2 flex items-center justify-between gap-3">
+          <label class="block text-xs font-bold uppercase tracking-[0.14em] text-black" for="estadoEventoId">Estado</label>
+          <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-black/60">Obligatorio</span>
+        </div>
+        <select
+          id="estadoEventoId"
+          formControlName="estadoEventoId"
+          required
+          class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"
+        >
           <option [value]="0">Selecciona un estado</option>
           @for (estado of estadosEvento(); track estado.estadoEventoId) {
             <option [value]="estado.estadoEventoId">{{ estado.descripcion }}</option>
           }
         </select>
+        @if (shouldShowError('estadoEventoId') && hasError('estadoEventoId', 'min')) {
+          <p class="mt-2 text-sm text-[#93000A]">Debes seleccionar un estado.</p>
+        }
       </div>
     </div>
 

@@ -44,16 +44,16 @@ namespace eventos_vivos.BLL.Services
                 throw new ArgumentException("No se permiten reservas cuando faltan menos de 1 hora para el evento");
 
             if (evento.FechaInicio < ahora.AddHours(24) && request.Cantidad > 5)
-                throw new ArgumentException("Si faltan menos de 24 horas para el evento, solo se permiten máximo 5 entradas por transacción");
+                throw new ArgumentException("Máximo 5 entradas por transacción cuando faltan menos de 24 horas para el evento.");
 
             // RN05: para eventos mayores a 100 se limita el número de entradas por transacción.
             if (evento.PrecioEntrada > 100 && request.Cantidad > 10)
-                throw new ArgumentException("Para eventos con precio de entrada superior a 100, se permite un máximo de 10 entradas por transacción.");
+                throw new ArgumentException("Máximo 10 entradas por transacción para eventos con precio superior a 100.");
 
             var entradasOcupadas = await ObtenerEntradasOcupadasAsync(request.EventoId);
             var entradasDisponibles = evento.CapacidadMaxima - entradasOcupadas;
             if (request.Cantidad > entradasDisponibles)
-                throw new ArgumentException("No hay suficientes entradas disponibles");
+                throw new ArgumentException($"No hay suficientes entradas disponibles ({entradasDisponibles})");
 
             var reserva = new Reserva
             {

@@ -6,16 +6,71 @@
 
   <form [formGroup]="form" (ngSubmit)="submit()" class="mt-5 grid gap-4">
     <div>
-      <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Nombre</label>
-      <input formControlName="nombre" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30" />
+      <div class="mb-2 flex items-center justify-between gap-3">
+        <label class="block text-xs font-bold uppercase tracking-[0.14em] text-black" for="nombre">Nombre</label>
+        <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-black/60">Obligatorio</span>
+      </div>
+      <input
+        id="nombre"
+        formControlName="nombre"
+        required
+        [attr.maxlength]="nombreMaxLength"
+        class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"
+      />
+      <div class="mt-2 flex items-center justify-between gap-3 text-xs">
+        <div class="text-[#93000A]">
+          @if (shouldShowError('nombre')) {
+            @if (hasError('nombre', 'required')) {
+              <p>El nombre es obligatorio.</p>
+            } @else if (hasError('nombre', 'maxlength')) {
+              <p>El nombre no puede superar {{ nombreMaxLength }} caracteres.</p>
+            }
+          }
+        </div>
+        <span class="ml-auto text-black/60">{{ form.controls.nombre.value.length }}/{{ nombreMaxLength }}</span>
+      </div>
     </div>
     <div>
-      <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Ciudad</label>
-      <input formControlName="ciudad" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30" />
+      <div class="mb-2 flex items-center justify-between gap-3">
+        <label class="block text-xs font-bold uppercase tracking-[0.14em] text-black" for="ciudad">Ciudad</label>
+        <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-black/60">Obligatorio</span>
+      </div>
+      <input
+        id="ciudad"
+        formControlName="ciudad"
+        required
+        [attr.maxlength]="ciudadMaxLength"
+        class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"
+      />
+      <div class="mt-2 flex items-center justify-between gap-3 text-xs">
+        <div class="text-[#93000A]">
+          @if (shouldShowError('ciudad')) {
+            @if (hasError('ciudad', 'required')) {
+              <p>La ciudad es obligatoria.</p>
+            } @else if (hasError('ciudad', 'maxlength')) {
+              <p>La ciudad no puede superar {{ ciudadMaxLength }} caracteres.</p>
+            }
+          }
+        </div>
+        <span class="ml-auto text-black/60">{{ form.controls.ciudad.value.length }}/{{ ciudadMaxLength }}</span>
+      </div>
     </div>
     <div>
-      <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Capacidad</label>
-      <input type="number" min="1" formControlName="capacidad" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30" />
+      <div class="mb-2 flex items-center justify-between gap-3">
+        <label class="block text-xs font-bold uppercase tracking-[0.14em] text-black" for="capacidad">Capacidad</label>
+        <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-black/60">Obligatorio</span>
+      </div>
+      <input
+        id="capacidad"
+        type="number"
+        min="1"
+        formControlName="capacidad"
+        required
+        class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"
+      />
+      @if (shouldShowError('capacidad')) {
+        <p class="mt-2 text-sm text-[#93000A]">La capacidad debe ser mayor a 0.</p>
+      }
     </div>
     <div class="flex flex-col gap-3 border-t border-[#D1D1D1] pt-5 sm:flex-row">
       <button type="submit" class="min-h-12 border border-black/30 bg-black px-5 py-3 text-sm font-bold uppercase tracking-[0.14em] text-white">

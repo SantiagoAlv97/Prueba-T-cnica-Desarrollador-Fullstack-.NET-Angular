@@ -13,6 +13,8 @@ import { VenuePayload } from '../../../core/services/venues.service';
 })
 export class VenueFormComponent {
   private readonly fb = inject(FormBuilder);
+  protected readonly nombreMaxLength = 200;
+  protected readonly ciudadMaxLength = 50;
 
   readonly venue = input<Venue | null>(null);
   readonly submitting = input(false);
@@ -23,9 +25,9 @@ export class VenueFormComponent {
   readonly cancelled = output<void>();
 
   protected readonly form = this.fb.nonNullable.group({
-    nombre: ['', [Validators.required, Validators.maxLength(150)]],
+    nombre: ['', [Validators.required, Validators.maxLength(this.nombreMaxLength)]],
     capacidad: [1, [Validators.required, Validators.min(1)]],
-    ciudad: ['', [Validators.required, Validators.maxLength(120)]],
+    ciudad: ['', [Validators.required, Validators.maxLength(this.ciudadMaxLength)]],
   });
 
   constructor() {
@@ -65,5 +67,14 @@ export class VenueFormComponent {
 
   protected cancel(): void {
     this.cancelled.emit();
+  }
+
+  protected shouldShowError(controlName: keyof typeof this.form.controls): boolean {
+    const control = this.form.controls[controlName];
+    return control.invalid && (control.touched || control.dirty);
+  }
+
+  protected hasError(controlName: keyof typeof this.form.controls, errorCode: string): boolean {
+    return Boolean(this.form.controls[controlName].errors?.[errorCode]);
   }
 }
