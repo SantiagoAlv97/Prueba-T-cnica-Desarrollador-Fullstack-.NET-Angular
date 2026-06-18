@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="../eventos-vivos.BDO/eventosvivos.BDO.csproj" Id="8775fc91-b4d0-457b-b044-7920acc4f8a5" />
+  <Project Path="../eventos-vivos.BLL/eventosvivos.BLL.csproj" Id="bb9b7e09-7b70-4cbd-9a88-5f418984a782" />
+  <Project Path="../eventos-vivos.DAL/eventosvivos.DAL.csproj" />
+  <Project Path="../eventos-vivos.Tests/eventosvivos.Tests.csproj" Id="afd96af6-6e92-4922-8915-9d8f5f73ee85" />
+  <Project Path="eventosvivos.API.csproj" />
+</Solution>
