@@ -1,0 +1,68 @@
+<section class="bg-[#F2F2F2] px-4 py-10 md:px-6 md:py-14 lg:px-12">
+  <div class="mx-auto max-w-[1200px]">
+    <div class="border-b border-[#D1D1D1] pb-4">
+      <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#0052D1]">Administración</p>
+      <h1 class="mt-3 text-3xl font-extrabold tracking-[-0.03em] text-black md:text-4xl">Reservas</h1>
+    </div>
+
+    <div class="mt-8">
+      @if (cargando()) {
+        <div class="border border-black/30 bg-white px-6 py-16 text-center">
+          <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#0052D1]">Cargando</p>
+          <p class="mt-3 text-lg font-semibold text-black">Cargando reservas...</p>
+        </div>
+      } @else if (error()) {
+        <div class="border border-[#93000A] bg-[#FFF4F2] px-6 py-16 text-center">
+          <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#93000A]">Error</p>
+          <p class="mt-3 text-lg font-semibold text-black">{{ error() }}</p>
+        </div>
+      } @else {
+        <div class="overflow-hidden border border-black/30 bg-white">
+          <div class="grid grid-cols-1 divide-y divide-[#D1D1D1]">
+            @for (reserva of reservas(); track reserva.id) {
+              <div class="grid gap-4 p-5 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)_auto] md:items-center">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#0052D1]">
+                    {{ reserva.estadoReserva || 'Pendiente' }}
+                  </p>
+                  <h2 class="mt-2 text-xl font-extrabold tracking-[-0.03em] text-black">
+                    {{ obtenerEvento(reserva) }}
+                  </h2>
+                  <p class="mt-2 text-sm leading-6 text-black/75">
+                    {{ obtenerUsuario(reserva) }} · {{ reserva.cantidad }} entradas
+                  </p>
+                </div>
+                <div class="text-sm leading-6 text-black/75">
+                  <p><span class="font-bold text-black">Código:</span> {{ reserva.codigoReserva || reserva.codigo || 'Sin código' }}</p>
+                  @if (reserva.fechaReserva) {
+                    <p><span class="font-bold text-black">Reserva:</span> {{ reserva.fechaReserva | date: 'dd/MM/yyyy, h:mm a' }}</p>
+                  }
+                  @if (reserva.fechaPago) {
+                    <p><span class="font-bold text-black">Pago:</span> {{ reserva.fechaPago | date: 'dd/MM/yyyy, h:mm a' }}</p>
+                  }
+                </div>
+                <div class="grid gap-3">
+                  @if (puedeConfirmarPago(reserva)) {
+                    <button type="button" (click)="confirmarPago(reserva)" class="min-h-11 border border-[#0052D1] bg-[#0052D1] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white">
+                      Confirmar pago
+                    </button>
+                  }
+                  @if (puedeCancelar(reserva)) {
+                    <button type="button" (click)="cancelar(reserva)" class="min-h-11 border border-black/30 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-black">
+                      Cancelar
+                    </button>
+                  }
+                  @if (!tieneAcciones(reserva)) {
+                    <p class="border border-[#D1D1D1] bg-[#F2F2F2] px-4 py-3 text-center text-xs font-bold uppercase tracking-[0.14em] text-black/60">
+                      Sin acciones
+                    </p>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,83 @@
+<section class="app-surface border border-black/30 bg-white p-5 md:p-6">
+  <div class="border-b border-[#D1D1D1] pb-4">
+    <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#0052D1]">Formulario</p>
+    <h2 class="mt-2 text-2xl font-extrabold tracking-[-0.03em] text-black">{{ title() }}</h2>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="mt-5 grid max-h-[78vh] gap-4 overflow-y-auto pr-1">
+    <div>
+      <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Título</label>
+      <input formControlName="titulo" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30" />
+    </div>
+
+    <div>
+      <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Descripción</label>
+      <textarea formControlName="descripcion" rows="4" class="w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30"></textarea>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Venue</label>
+        <select formControlName="venueId" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30">
+          <option [value]="0">Selecciona un venue</option>
+          @for (venue of venues(); track venue.venueId) {
+            <option [value]="venue.venueId">{{ venue.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Tipo</label>
+        <select formControlName="tipoEventoId" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30">
+          <option [value]="0">Selecciona un tipo</option>
+          @for (tipo of tiposEvento(); track tipo.tipoEventoId) {
+            <option [value]="tipo.tipoEventoId">{{ tipo.descripcion }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Fecha inicio</label>
+        <input type="datetime-local" formControlName="fechaInicio" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30" />
+      </div>
+      <div>
+        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Fecha fin</label>
+        <input type="datetime-local" formControlName="fechaFin" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30" />
+        @if (form.controls.fechaFin.errors?.['beforeStart']) {
+          <p class="mt-2 text-sm text-[#93000A]">La fecha fin debe ser posterior a la fecha inicio.</p>
+        }
+      </div>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-3">
+      <div>
+        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Capacidad</label>
+        <input type="number" min="1" formControlName="capacidadMaxima" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30" />
+      </div>
+      <div>
+        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Precio</label>
+        <input type="number" min="0" formControlName="precioEntrada" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30" />
+      </div>
+      <div>
+        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-black">Estado</label>
+        <select formControlName="estadoEventoId" class="min-h-12 w-full border border-black/30 bg-white px-4 py-3 text-sm outline-none focus:border-2 focus:border-black/30">
+          <option [value]="0">Selecciona un estado</option>
+          @for (estado of estadosEvento(); track estado.estadoEventoId) {
+            <option [value]="estado.estadoEventoId">{{ estado.descripcion }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-3 border-t border-[#D1D1D1] pt-5 sm:flex-row">
+      <button type="submit" class="min-h-12 border border-black/30 bg-black px-5 py-3 text-sm font-bold uppercase tracking-[0.14em] text-white">
+        {{ submitting() ? 'Guardando...' : submitLabel() }}
+      </button>
+      <button type="button" (click)="cancel()" class="min-h-12 border border-black/30 bg-white px-5 py-3 text-sm font-bold uppercase tracking-[0.14em] text-black">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</section>

@@ -1,0 +1,65 @@
+<section class="app-fade-up bg-[#F2F2F2] px-4 py-10 md:px-6 md:py-14 lg:px-12">
+  <div class="mx-auto max-w-[1200px]">
+    <div class="flex flex-col gap-4 border-b border-[#D1D1D1] pb-4 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#0052D1]">Administración</p>
+        <h1 class="mt-3 text-3xl font-extrabold tracking-[-0.03em] text-black md:text-4xl">Venues</h1>
+      </div>
+      <button type="button" (click)="abrirCrear()" class="min-h-12 border border-black/30 bg-black px-5 py-3 text-sm font-bold uppercase tracking-[0.14em] text-white">
+        Nuevo venue
+      </button>
+    </div>
+
+    @if (formularioAbierto()) {
+      <div
+        class="app-modal-backdrop fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/45 px-4 py-8 md:px-6 md:py-12"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Formulario de venue"
+      >
+        <div class="app-modal-panel w-full max-w-[720px]">
+          <app-venue-form
+            [venue]="venueEditando()"
+            [submitting]="guardando()"
+            [title]="venueEditando() ? 'Editar venue' : 'Nuevo venue'"
+            [submitLabel]="venueEditando() ? 'Actualizar venue' : 'Crear venue'"
+            (submitted)="guardar($event)"
+            (cancelled)="cerrarFormulario()"
+          />
+        </div>
+      </div>
+    }
+
+    <div class="mt-8">
+      @if (cargando()) {
+        <div class="app-surface border border-black/30 bg-white px-6 py-16 text-center">
+          <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#0052D1]">Cargando</p>
+          <p class="mt-3 text-lg font-semibold text-black">Cargando venues...</p>
+        </div>
+      } @else if (error()) {
+        <div class="app-surface border border-[#93000A] bg-[#FFF4F2] px-6 py-16 text-center">
+          <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#93000A]">Error</p>
+          <p class="mt-3 text-lg font-semibold text-black">{{ error() }}</p>
+        </div>
+      } @else {
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          @for (venue of venues(); track venue.venueId) {
+            <article class="app-surface app-surface-hover flex h-full flex-col border border-black/30 bg-white p-5">
+              <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#0052D1]">{{ venue.ciudad }}</p>
+              <h2 class="mt-3 text-2xl font-extrabold tracking-[-0.03em] text-black">{{ venue.nombre }}</h2>
+              <p class="mt-3 text-sm leading-6 text-black/75">{{ venue.capacidad }} personas de capacidad.</p>
+              <div class="mt-auto grid gap-3 pt-6">
+                <button type="button" (click)="abrirEditar(venue)" class="min-h-12 border border-[#0052D1] bg-[#0052D1] px-5 py-3 text-sm font-bold uppercase tracking-[0.14em] text-white">
+                  Editar
+                </button>
+                <button type="button" (click)="eliminar(venue)" class="min-h-12 border border-black/30 bg-white px-5 py-3 text-sm font-bold uppercase tracking-[0.14em] text-black">
+                  Eliminar
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,92 @@
+<nav class="border-b border-black/30 bg-white">
+  <div
+    class="mx-auto flex max-w-[1200px] flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6 lg:px-12"
+  >
+    <div class="flex items-center justify-between gap-4">
+      <a
+        routerLink="/admin/eventos"
+        class="text-xl font-extrabold tracking-[-0.03em] text-black transition hover:text-[#0052D1]"
+      >
+        EventosVivos Admin
+      </a>
+
+      @if (estaAutenticado() && fotoPerfil()) {
+        <img
+          [src]="fotoPerfil()"
+          [alt]="'Foto de ' + nombreUsuario()"
+          class="h-10 w-10 border border-black/30 object-cover md:hidden"
+          referrerpolicy="no-referrer"
+        />
+      }
+    </div>
+
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
+      <div class="grid grid-cols-2 gap-2 md:flex md:items-center md:gap-5">
+        <a
+          routerLink="/admin/eventos"
+          routerLinkActive="text-[#0052D1]"
+          class="text-sm font-bold uppercase tracking-[0.14em] text-black transition hover:text-[#0052D1]"
+        >
+          Eventos
+        </a>
+        <a
+          routerLink="/admin/venues"
+          routerLinkActive="text-[#0052D1]"
+          class="text-sm font-bold uppercase tracking-[0.14em] text-black transition hover:text-[#0052D1]"
+        >
+          Venues
+        </a>
+        <a
+          routerLink="/admin/reservas"
+          routerLinkActive="text-[#0052D1]"
+          class="text-sm font-bold uppercase tracking-[0.14em] text-black transition hover:text-[#0052D1]"
+        >
+          Reservas
+        </a>
+        <a
+          routerLink="/admin/reportes"
+          routerLinkActive="text-[#0052D1]"
+          class="text-sm font-bold uppercase tracking-[0.14em] text-black transition hover:text-[#0052D1]"
+        >
+          Reportes
+        </a>
+      </div>
+
+      @if (estaAutenticado()) {
+        <div class="flex items-center gap-3 border-t border-[#D1D1D1] pt-3 md:border-t-0 md:pt-0">
+          @if (fotoPerfil()) {
+            <img
+              [src]="fotoPerfil()"
+              [alt]="'Foto de ' + nombreUsuario()"
+              class="h-10 w-10 border border-black/30 object-cover"
+              referrerpolicy="no-referrer"
+            />
+          } @else {
+            <div
+              class="flex h-10 w-10 items-center justify-center border border-black/30 bg-[#F2F2F2] text-sm font-bold uppercase text-black"
+            >
+              {{ nombreUsuario().slice(0, 1) }}
+            </div>
+          }
+
+          <div class="min-w-0">
+            <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#0052D1]">
+              Administración
+            </p>
+            <p class="truncate text-sm font-semibold text-black">
+              {{ nombreUsuario() }}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            (click)="cerrarSesion()"
+            class="min-h-10 border border-black/30 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-black transition hover:bg-[#F2F2F2] focus:border-2 focus:border-black/30"
+          >
+            Cerrar sesión
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</nav>

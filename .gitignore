@@ -58,3 +58,16 @@ TestResults/
 secrets.json
 appsettings.Local.json
 appsettings.*.local.json
+
+# Angular / Node
+**/node_modules/
+**/dist/
+**/.angular/
+**/.cache/
+
+# Visual Studio / .NET
+.vs/
+bin/
+obj/
+*.user
+*.suo

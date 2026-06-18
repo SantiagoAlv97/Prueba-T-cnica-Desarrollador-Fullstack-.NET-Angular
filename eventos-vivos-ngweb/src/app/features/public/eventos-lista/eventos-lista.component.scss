@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+.hero-slide {
+  opacity: 0;
+  transition: opacity 900ms ease-in-out;
+}
+
+.hero-slide-active {
+  opacity: 1;
+}
+
+.event-description {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
