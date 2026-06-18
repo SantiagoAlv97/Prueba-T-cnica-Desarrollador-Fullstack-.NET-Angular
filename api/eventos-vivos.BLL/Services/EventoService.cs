@@ -94,7 +94,7 @@ namespace eventos_vivos.BLL.Services
 
             var entradasOcupadas = await ObtenerEntradasOcupadasAsync(id);
             if (request.CapacidadMaxima < entradasOcupadas)
-                throw new ArgumentException("Capacidad máxima no puede ser menor a las entradas ya ocupadas");
+                throw new ArgumentException($"La capacidad máxima no puede ser menor que las entradas ya ocupadas ({entradasOcupadas}).");
 
             e.Titulo = request.Titulo;
             e.Descripcion = request.Descripcion;
